@@ -18,13 +18,13 @@ public class PersonTypesController : ControllerBase
 
     // GET: api/persons
     [HttpGet]
-    public ActionResult<List<Person>> GetAll()
+    public ActionResult<List<PersonType>> GetAll()
     {
         return Ok(PersonTypes);
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Person> GetById(int id)
+    public ActionResult<PersonType> GetById(int id)
     {
         var personType = PersonTypes.FirstOrDefault(p => p.Id == id);
         if (personType == null) return NotFound();
@@ -32,7 +32,7 @@ public class PersonTypesController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<Person> Create(PersonType personType)
+    public ActionResult<PersonType> Create(PersonType personType)
     {
         personType.Id = PersonTypes.Max(p => p.Id) + 1;
         PersonTypes.Add(personType);
@@ -54,10 +54,10 @@ public class PersonTypesController : ControllerBase
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var person = PersonTypes.FirstOrDefault(p => p.Id == id);
-        if (person == null) return NotFound();
+        var personType = PersonTypes.FirstOrDefault(p => p.Id == id);
+        if (personType == null) return NotFound();
 
-        PersonTypes.Remove(person);
+        PersonTypes.Remove(personType);
         return NoContent();
     }
 }
