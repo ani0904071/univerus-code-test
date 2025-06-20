@@ -1,0 +1,19 @@
+@rootURL = http://localhost:5045
+
+###
+GET {{rootURL}}/api/persontypes
+Accept: application/json
+
+###
+GET {{rootURL}}/api/persontypes/2
+Accept: application/json
+
+###
+POST {{rootURL}}/api/persontypes
+Accept: application/json
+{
+    	
+    "id": 2,
+    "personTypeDescription" : "JobLess",
+
+}
