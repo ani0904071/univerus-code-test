@@ -10,7 +10,7 @@ interface Props {
   isEdit: boolean;
 }
 
-function PersonModal({ show, onClose, onSave, form, personTypes, isEdit }: Props) {
+function PersonModal({  onClose, onSave, form, personTypes, isEdit }: Props) {
   return (
     <div className="modal show d-block" tabIndex={-1}>
       <div className="modal-dialog">
