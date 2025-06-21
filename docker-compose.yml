@@ -12,5 +12,15 @@ services:
     volumes:
       - sqlserverdata:/var/opt/mssql
 
+  frontend:
+    build:
+      context: ./frontend         # 👈 your React app folder
+      dockerfile: Dockerfile      # optional if the file is named Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - sqlserver
+
 volumes:
   sqlserverdata:
