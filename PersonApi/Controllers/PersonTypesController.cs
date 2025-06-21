@@ -42,8 +42,18 @@ public class PersonTypesController : ControllerBase
             return BadRequest("PersonType data is required.");
         }
 
+        // Check for duplicates (case-insensitive)
+        bool exists = await _context.PersonTypes
+            .AnyAsync(pt => pt.Description.ToLower() == newPersonType.Description.ToLower());
+
+        if (exists)
+        {
+            return Conflict($"Duplicate detected: '{newPersonType.Description}' already exists.");
+        }
+
         _context.PersonTypes.Add(newPersonType);
         await _context.SaveChangesAsync();
+
         return CreatedAtAction(nameof(GetById), new { id = newPersonType.Id }, newPersonType);
     }
     

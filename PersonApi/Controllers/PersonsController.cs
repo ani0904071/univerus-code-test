@@ -44,8 +44,18 @@ public class PersonsController : ControllerBase
             return BadRequest("Person data is required.");
         }
 
+        // ✅ Check if PersonTypeId exists
+        bool personTypeExists = await _context.PersonTypes
+            .AnyAsync(pt => pt.Id == newPerson.PersonTypeId);
+
+        if (!personTypeExists)
+        {
+            return BadRequest($"Invalid PersonTypeId: {newPerson.PersonTypeId} does not exist.");
+        }
+
         _context.Persons.Add(newPerson);
         await _context.SaveChangesAsync();
+
         return CreatedAtAction(nameof(GetById), new { id = newPerson.Id }, newPerson);
     }
 

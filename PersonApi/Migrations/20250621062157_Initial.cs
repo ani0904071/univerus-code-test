@@ -18,7 +18,7 @@ namespace PersonApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS")
                 },
                 constraints: table =>
                 {
@@ -70,6 +70,12 @@ namespace PersonApi.Migrations
                 name: "IX_Persons_PersonTypeId",
                 table: "Persons",
                 column: "PersonTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonTypes_Description",
+                table: "PersonTypes",
+                column: "Description",
+                unique: true);
         }
 
         /// <inheritdoc />

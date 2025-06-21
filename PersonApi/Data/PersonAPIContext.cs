@@ -72,12 +72,16 @@ namespace PersonApi.Data
 
             modelBuilder.Entity<PersonType>(entity =>
             {
-                entity.HasKey(e => e.Id);
+                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Description)
                     .IsRequired()
-                    .HasMaxLength(100);
-            });
+                    .HasMaxLength(100)
+                    .UseCollation("SQL_Latin1_General_CP1_CI_AS"); // 👈 Case-insensitive collation
+
+                entity.HasIndex(e => e.Description)
+                    .IsUnique();
+                        });
         }
 
     }

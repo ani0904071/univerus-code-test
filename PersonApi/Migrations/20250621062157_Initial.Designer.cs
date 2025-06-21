@@ -11,7 +11,7 @@ using PersonApi.Data;
 namespace PersonApi.Migrations
 {
     [DbContext(typeof(PersonAPIContext))]
-    [Migration("20250621061033_Initial")]
+    [Migration("20250621062157_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -84,9 +84,13 @@ namespace PersonApi.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(100)")
+                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Description")
+                        .IsUnique();
 
                     b.ToTable("PersonTypes");
 

@@ -81,9 +81,13 @@ namespace PersonApi.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(100)")
+                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Description")
+                        .IsUnique();
 
                     b.ToTable("PersonTypes");
 
