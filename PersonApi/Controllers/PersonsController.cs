@@ -11,13 +11,6 @@ namespace PersonApi.Controllers;
 public class PersonsController : ControllerBase
 {
 
-
-    // private static readonly List<Person> Persons = new List<Person>
-    // {
-    //     new Person { Id = 1, PersonName = "John Doe", PersonAge = 30, PersonTypeId = 1 },
-    //     new Person { Id = 2, PersonName = "Jane Smith", PersonAge = 25, PersonTypeId = 2 },
-    // };
-
     private readonly PersonAPIContext _context;
     public PersonsController(PersonAPIContext context)
     {
@@ -53,27 +46,55 @@ public class PersonsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = newPerson.Id }, newPerson);
     }
 
-    // [HttpPut("{id}")]
-    // public IActionResult Update(int id, Person updatedPerson)
-    // {
-    //     var person = Persons.FirstOrDefault(p => p.Id == id);
-    //     if (person == null) return NotFound();
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, Person updatedPerson)
+    {
+        if (id != updatedPerson.Id)
+        {
+            return BadRequest("Person ID mismatch.");
+        }
+        if (updatedPerson == null)
+        {
+            return BadRequest("Person data is required.");
+        }
 
-    //     person.PersonName = updatedPerson.PersonName;
-    //     person.PersonType = updatedPerson.PersonType;
-    //     person.PersonAge = updatedPerson.PersonAge;
-    //     person.PersonTypeId = updatedPerson.PersonTypeId;
+        // Check if the person exists
+        var person = await _context.Persons.FindAsync(id);
 
-    //     return NoContent();
-    // }
+        if (person == null)
+        {
+            return NotFound();
+        }
+                                    
+        // Update the person properties
+        person.PersonName = updatedPerson.PersonName;
+        person.PersonType = updatedPerson.PersonType;
+        person.PersonAge = updatedPerson.PersonAge;
+        person.PersonTypeId = updatedPerson.PersonTypeId;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
     
-    // [HttpDelete("{id}")]
-    // public IActionResult Delete(int id)
-    // {
-    //     var person = Persons.FirstOrDefault(p => p.Id == id);
-    //     if (person == null) return NotFound();
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {   
+        if (id == null || id <= 0)
+        {
+            return BadRequest("Invalid person ID.");
+        }
 
-    //     Persons.Remove(person);
-    //     return NoContent();
-    // }
+        // Check if the person exists
+        var person = await _context.Persons.FindAsync(id);
+        if (person == null)
+        {
+            return NotFound();
+        }
+
+
+        _context.Remove(person);
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
 }
