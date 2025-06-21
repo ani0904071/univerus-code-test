@@ -19,9 +19,9 @@ namespace PersonApi.Data
 
              // Seed PersonTypes first (FK target)
             modelBuilder.Entity<PersonType>().HasData(
-                new PersonType { Id = 1, PersonTypeDescription = "Student" },
-                new PersonType { Id = 2, PersonTypeDescription = "Employee" },
-                new PersonType { Id = 3, PersonTypeDescription = "Visitor" }
+                new PersonType { Id = 1, Description = "Student" },
+                new PersonType { Id = 2, Description = "Employee" },
+                new PersonType { Id = 3, Description = "Visitor" }
             );
 
             // Seed Persons
@@ -29,22 +29,22 @@ namespace PersonApi.Data
                 new Person
                 {
                     Id = 1,
-                    PersonName = "Alice",
-                    PersonAge = 22,
+                    Name = "Alice",
+                    Age = 22,
                     PersonTypeId = 1
                 },
                 new Person
                 {
                     Id = 2,
-                    PersonName = "Bob",
-                    PersonAge = 30,
+                    Name = "Bob",
+                    Age = 30,
                     PersonTypeId = 2
                 },
                 new Person
                 {
                     Id = 3,
-                    PersonName = "Charlie",
-                    PersonAge = 40,
+                    Name = "Charlie",
+                    Age = 40,
                     PersonTypeId = 3
                 }
             );
@@ -54,19 +54,19 @@ namespace PersonApi.Data
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.PersonName)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.PersonAge)
+                entity.Property(e => e.Age)
                     .IsRequired();
 
                 entity.Property(e => e.PersonTypeId)
                     .IsRequired();
 
-                entity.HasOne(e => e.PersonType)
+                entity.HasOne(pt => pt.PersonType)
                     .WithMany(pt => pt.Persons)
-                    .HasForeignKey(e => e.PersonTypeId)
+                    .HasForeignKey(pt => pt.PersonTypeId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
@@ -74,7 +74,7 @@ namespace PersonApi.Data
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.PersonTypeDescription)
+                entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(100);
             });

@@ -5,7 +5,7 @@ public class PersonType
 {
     public int Id { get; set; }
 
-    public string PersonTypeDescription { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
 
     // Navigation property (optional but useful for EF)
     [JsonIgnore] 

@@ -70,9 +70,9 @@ public class PersonsController : ControllerBase
         }
                                     
         // Update the person properties
-        person.PersonName = updatedPerson.PersonName;
+        person.Name = updatedPerson.Name;
         person.PersonType = updatedPerson.PersonType;
-        person.PersonAge = updatedPerson.PersonAge;
+        person.Age = updatedPerson.Age;
         person.PersonTypeId = updatedPerson.PersonTypeId;
 
         await _context.SaveChangesAsync();

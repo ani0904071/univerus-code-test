@@ -11,8 +11,8 @@ using PersonApi.Data;
 namespace PersonApi.Migrations
 {
     [DbContext(typeof(PersonAPIContext))]
-    [Migration("20250621014631_initial")]
-    partial class initial
+    [Migration("20250621061033_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,10 +32,10 @@ namespace PersonApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("PersonAge")
+                    b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<string>("PersonName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -53,22 +53,22 @@ namespace PersonApi.Migrations
                         new
                         {
                             Id = 1,
-                            PersonAge = 22,
-                            PersonName = "Alice",
+                            Age = 22,
+                            Name = "Alice",
                             PersonTypeId = 1
                         },
                         new
                         {
                             Id = 2,
-                            PersonAge = 30,
-                            PersonName = "Bob",
+                            Age = 30,
+                            Name = "Bob",
                             PersonTypeId = 2
                         },
                         new
                         {
                             Id = 3,
-                            PersonAge = 40,
-                            PersonName = "Charlie",
+                            Age = 40,
+                            Name = "Charlie",
                             PersonTypeId = 3
                         });
                 });
@@ -81,7 +81,7 @@ namespace PersonApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("PersonTypeDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -94,17 +94,17 @@ namespace PersonApi.Migrations
                         new
                         {
                             Id = 1,
-                            PersonTypeDescription = "Student"
+                            Description = "Student"
                         },
                         new
                         {
                             Id = 2,
-                            PersonTypeDescription = "Employee"
+                            Description = "Employee"
                         },
                         new
                         {
                             Id = 3,
-                            PersonTypeDescription = "Visitor"
+                            Description = "Visitor"
                         });
                 });
 
