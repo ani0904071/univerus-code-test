@@ -21,14 +21,17 @@ public class PersonsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<Person>>> GetAll()
     {
-        return Ok(await _context.Persons.ToListAsync());
+        return Ok(await _context.Persons
+                            .Include(p => p.PersonType)
+                            .ToListAsync());
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Person>> GetById(int id)
     {
         var person = await _context.Persons
-            .FindAsync(id);
+                                    .Include(p => p.PersonType)
+                                    .FirstOrDefaultAsync(p => p.Id == id);
         if (person == null) return NotFound();
         return Ok(person);
     }
