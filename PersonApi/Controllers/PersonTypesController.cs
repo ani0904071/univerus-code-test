@@ -1,63 +1,72 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using PersonApi.Data;
 using PersonApi.Models;
 
 
 namespace PersonApi.Controllers;
 
+using Microsoft.EntityFrameworkCore;
+
 [ApiController]
 [Route("api/[controller]")]
 public class PersonTypesController : ControllerBase
 {
-
-
-    private static readonly List<PersonType> PersonTypes = new List<PersonType>
+    
+    private readonly PersonAPIContext _context;
+    public PersonTypesController(PersonAPIContext context)
     {
-        new PersonType { Id = 1, PersonTypeDescription = "Teacher" },
-        new PersonType { Id = 2, PersonTypeDescription = "Student" },       
-    };
+        _context = context;
+    }
 
     // GET: api/persons
     [HttpGet]
-    public ActionResult<List<PersonType>> GetAll()
+    public async Task<ActionResult<List<PersonType>>> GetAll()
     {
-        return Ok(PersonTypes);
+        return Ok(await _context.PersonTypes.ToListAsync());
     }
 
     [HttpGet("{id}")]
-    public ActionResult<PersonType> GetById(int id)
+    public async Task<ActionResult<PersonType>> GetById(int id)
     {
-        var personType = PersonTypes.FirstOrDefault(p => p.Id == id);
+        var personType = await _context.PersonTypes.FindAsync(id);
         if (personType == null) return NotFound();
         return Ok(personType);
     }
 
     [HttpPost]
-    public ActionResult<PersonType> Create(PersonType personType)
+    public async Task<ActionResult<PersonType>> Create(PersonType newPersonType)
     {
-        personType.Id = PersonTypes.Max(p => p.Id) + 1;
-        PersonTypes.Add(personType);
-        return CreatedAtAction(nameof(GetById), new { id = personType.Id }, personType);
-    }
+        if (newPersonType == null)
+        {
+            return BadRequest("PersonType data is required.");
+        }
 
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, PersonType updatedPersonType)
-    {
-        var personType = PersonTypes.FirstOrDefault(p => p.Id == id);
-        if (personType == null) return NotFound();
-
-        personType.PersonTypeDescription = updatedPersonType.PersonTypeDescription;
-    
-
-        return NoContent();
+        _context.PersonTypes.Add(newPersonType);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(GetById), new { id = newPersonType.Id }, newPersonType);
     }
     
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
-    {
-        var personType = PersonTypes.FirstOrDefault(p => p.Id == id);
-        if (personType == null) return NotFound();
 
-        PersonTypes.Remove(personType);
-        return NoContent();
-    }
+    // [HttpPut("{id}")]
+    // public IActionResult Update(int id, PersonType updatedPersonType)
+    // {
+    //     var personType = PersonTypes.FirstOrDefault(p => p.Id == id);
+    //     if (personType == null) return NotFound();
+
+    //     personType.PersonTypeDescription = updatedPersonType.PersonTypeDescription;
+    
+
+    //     return NoContent();
+    // }
+    
+    // [HttpDelete("{id}")]
+    // public IActionResult Delete(int id)
+    // {
+    //     var personType = PersonTypes.FirstOrDefault(p => p.Id == id);
+    //     if (personType == null) return NotFound();
+
+    //     PersonTypes.Remove(personType);
+    //     return NoContent();
+    // }
 }
