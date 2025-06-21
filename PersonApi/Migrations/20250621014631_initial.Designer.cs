@@ -11,7 +11,7 @@ using PersonApi.Data;
 namespace PersonApi.Migrations
 {
     [DbContext(typeof(PersonAPIContext))]
-    [Migration("20250621014027_initial")]
+    [Migration("20250621014631_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -48,6 +48,29 @@ namespace PersonApi.Migrations
                     b.HasIndex("PersonTypeId");
 
                     b.ToTable("Persons");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            PersonAge = 22,
+                            PersonName = "Alice",
+                            PersonTypeId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            PersonAge = 30,
+                            PersonName = "Bob",
+                            PersonTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            PersonAge = 40,
+                            PersonName = "Charlie",
+                            PersonTypeId = 3
+                        });
                 });
 
             modelBuilder.Entity("PersonApi.Models.PersonType", b =>
@@ -66,6 +89,23 @@ namespace PersonApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PersonTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            PersonTypeDescription = "Student"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            PersonTypeDescription = "Employee"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            PersonTypeDescription = "Visitor"
+                        });
                 });
 
             modelBuilder.Entity("PersonApi.Models.Person", b =>

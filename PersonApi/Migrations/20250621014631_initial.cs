@@ -2,6 +2,8 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace PersonApi.Migrations
 {
     /// <inheritdoc />
@@ -42,6 +44,26 @@ namespace PersonApi.Migrations
                         principalTable: "PersonTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "PersonTypes",
+                columns: new[] { "Id", "PersonTypeDescription" },
+                values: new object[,]
+                {
+                    { 1, "Student" },
+                    { 2, "Employee" },
+                    { 3, "Visitor" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Persons",
+                columns: new[] { "Id", "PersonAge", "PersonName", "PersonTypeId" },
+                values: new object[,]
+                {
+                    { 1, 22, "Alice", 1 },
+                    { 2, 30, "Bob", 2 },
+                    { 3, 40, "Charlie", 3 }
                 });
 
             migrationBuilder.CreateIndex(
