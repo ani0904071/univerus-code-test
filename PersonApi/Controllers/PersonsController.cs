@@ -26,7 +26,7 @@ public class PersonsController : ControllerBase
                             .ToListAsync());
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<Person>> GetById(int id)
     {
         var person = await _context.Persons
@@ -59,7 +59,7 @@ public class PersonsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = newPerson.Id }, newPerson);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, Person updatedPerson)
     {
         if (id != updatedPerson.Id)
@@ -90,7 +90,7 @@ public class PersonsController : ControllerBase
         return NoContent();
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {   
         if (id <= 0)
