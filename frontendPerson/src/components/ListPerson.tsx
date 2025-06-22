@@ -191,9 +191,27 @@ function ListPerson({ personTypes, initialPersons }: Props) {
           ) : (
             sortedPersons.map((person) => (
               <tr key={person.id}>
-                <td>{person.name}</td>
+                <td>
+                  <span
+                    className="truncate-hover"
+                    data-fulltext={person.name}
+                    style={{ maxWidth: "120px" }}
+                    title={person.name}
+                  >
+                    {person.name}
+                  </span>
+                </td>
                 <td>{person.age}</td>
-                <td>{person.personType?.description || person.personTypeId}</td>
+                <td>
+                  <span
+                    className="truncate-hover"
+                    style={{ maxWidth: "120px" }}
+                    data-fulltext={person.personType?.description || ""}
+                    title={person.personType?.description}
+                  >
+                    {person.personType?.description || person.personTypeId}
+                  </span>
+                </td>
                 <td>
                   <button
                     className="btn btn-sm btn-primary me-2"

@@ -15,3 +15,31 @@
   border-radius: 6px;
   background-color: #f9f9f9;
 }
+
+.truncate-hover {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px; /* adjust as needed */
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+
+.truncate-hover:hover::after {
+  content: attr(data-fulltext);
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: normal;
+  z-index: 10;
+  top: 100%;
+  left: 0;
+  font-size: 0.8rem;
+  max-width: 300px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  white-space: pre-wrap;
+}
+
