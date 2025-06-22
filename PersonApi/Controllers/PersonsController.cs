@@ -40,23 +40,26 @@ public class PersonsController : ControllerBase
     public async Task<ActionResult<Person>> Create(Person newPerson)
     {
         if (newPerson == null)
-        {
             return BadRequest("Person data is required.");
-        }
 
-        // ✅ Check if PersonTypeId exists
+        // Validate the PersonTypeId exists
         bool personTypeExists = await _context.PersonTypes
             .AnyAsync(pt => pt.Id == newPerson.PersonTypeId);
 
         if (!personTypeExists)
-        {
             return BadRequest($"Invalid PersonTypeId: {newPerson.PersonTypeId} does not exist.");
-        }
 
+        // Add and save the person
         _context.Persons.Add(newPerson);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetById), new { id = newPerson.Id }, newPerson);
+        //  Reload the person from DB with the PersonType included
+        var createdPerson = await _context.Persons
+            .Include(p => p.PersonType)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == newPerson.Id);
+
+        return CreatedAtAction(nameof(GetById), new { id = newPerson.Id }, createdPerson);
     }
 
     [HttpPut("{id:int}")]
