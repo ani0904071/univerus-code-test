@@ -17,7 +17,7 @@ namespace PersonApi.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seed PersonTypes first (FK target)
+             // Seed PersonTypes first (FK target)
             modelBuilder.Entity<PersonType>().HasData(
                 new PersonType { Id = 1, Description = "Student" },
                 new PersonType { Id = 2, Description = "Employee" },
@@ -72,7 +72,7 @@ namespace PersonApi.Data
 
             modelBuilder.Entity<PersonType>(entity =>
             {
-                entity.HasKey(e => e.Id);
+                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Description)
                     .IsRequired()
@@ -81,7 +81,7 @@ namespace PersonApi.Data
 
                 entity.HasIndex(e => e.Description)
                     .IsUnique();
-            });
+                        });
         }
 
     }

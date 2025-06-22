@@ -34,8 +34,8 @@ namespace PersonApi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("PersonTypeId")
                         .HasColumnType("int");
@@ -80,8 +80,8 @@ namespace PersonApi.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)")
                         .UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
                     b.HasKey("Id");

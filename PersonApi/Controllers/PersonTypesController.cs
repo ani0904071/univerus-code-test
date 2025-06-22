@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 [Route("api/[controller]")]
 public class PersonTypesController : ControllerBase
 {
-    
+
     private readonly PersonAPIContext _context;
     public PersonTypesController(PersonAPIContext context)
     {
@@ -26,7 +26,7 @@ public class PersonTypesController : ControllerBase
         return Ok(await _context.PersonTypes.ToListAsync());
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<PersonType>> GetById(int id)
     {
         var personType = await _context.PersonTypes.FindAsync(id);
@@ -56,21 +56,21 @@ public class PersonTypesController : ControllerBase
 
         return CreatedAtAction(nameof(GetById), new { id = newPersonType.Id }, newPersonType);
     }
-    
 
-    // [HttpPut("{id}")]
+
+    // [HttpPut("{id:int}")]
     // public IActionResult Update(int id, PersonType updatedPersonType)
     // {
     //     var personType = PersonTypes.FirstOrDefault(p => p.Id == id);
     //     if (personType == null) return NotFound();
 
     //     personType.PersonTypeDescription = updatedPersonType.PersonTypeDescription;
-    
+
 
     //     return NoContent();
     // }
-    
-    // [HttpDelete("{id}")]
+
+    // [HttpDelete("{id:int}")]
     // public IActionResult Delete(int id)
     // {
     //     var personType = PersonTypes.FirstOrDefault(p => p.Id == id);
