@@ -33,7 +33,9 @@ function App() {
         if (!personsRes.ok)
           throw new Error(`Failed to fetch persons: ${personsRes.statusText}`);
         if (!typesRes.ok)
-          throw new Error(`Failed to fetch person types: ${typesRes.statusText}`);
+          throw new Error(
+            `Failed to fetch person types: ${typesRes.statusText}`
+          );
 
         const personsData: Person[] = await personsRes.json();
         const personTypesData: PersonType[] = await typesRes.json();
@@ -59,7 +61,10 @@ function App() {
         <ListPerson personTypes={personTypes} initialPersons={persons} />
       </div>
       <div className="scroll-section">
-        <ListPersonTypes personTypes={personTypes} onPersonTypeAdded={refreshPersonTypes} />
+        <ListPersonTypes
+          personTypes={personTypes}
+          onPersonTypeAdded={refreshPersonTypes}
+        />
       </div>
     </div>
   );
