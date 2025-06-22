@@ -78,7 +78,7 @@ public class PersonsController : ControllerBase
         {
             return NotFound();
         }
-                                    
+
         // Update the person properties
         person.Name = updatedPerson.Name;
         person.PersonType = updatedPerson.PersonType;
@@ -89,10 +89,10 @@ public class PersonsController : ControllerBase
 
         return NoContent();
     }
-    
+
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
-    {   
+    {
         if (id <= 0)
         {
             return BadRequest("Invalid person ID.");

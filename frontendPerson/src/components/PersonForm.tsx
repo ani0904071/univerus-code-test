@@ -24,8 +24,8 @@ function PersonForm({ initialForm, personTypes, onSubmit }: Props) {
 
     if (!form.name.trim()) {
       errs.name = "Name is required";
-    } else if (form.name.length > 30) {
-      errs.name = "Name must be under 30 characters";
+    } else if (form.name.length < 2 || form.name.length > 30) {
+      errs.name = "Name must be between 2 and 30 characters";
     } else if (!namePattern.test(form.name)) {
       errs.name = "Name can only contain letters, and spaces";
     }
