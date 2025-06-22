@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import type { PersonCreate, PersonType } from '..//models/model';
+import React, { useState, useEffect } from "react";
+import type { PersonCreate, PersonType } from "..//models/model";
 
 interface Props {
   initialForm: PersonCreate;
@@ -18,23 +18,40 @@ function PersonForm({ initialForm, personTypes, onSubmit }: Props) {
 
   const validate = (): boolean => {
     const errs: typeof errors = {};
-    if (!form.name.trim()) errs.name = 'Name is required';
-    else if (form.name.length > 50) errs.name = 'Name must be under 50 characters';
 
-    if (!form.age) errs.age = 'Age is required';
-    else if (form.age < 5 || form.age > 60) errs.age = 'Age must be between 5 and 60';
+    // Allows only letters, numbers, and spaces (no special characters, no hyphen, no underscore)
+    const namePattern = /^[a-zA-Z ]+$/;
 
-    if (!form.personTypeId) errs.personTypeId = 'Person type is required';
+    if (!form.name.trim()) {
+      errs.name = "Name is required";
+    } else if (form.name.length > 30) {
+      errs.name = "Name must be under 30 characters";
+    } else if (!namePattern.test(form.name)) {
+      errs.name = "Name can only contain letters, and spaces";
+    }
+
+    if (!form.age) {
+      errs.age = "Age is required";
+    } else if (form.age < 5 || form.age > 60) {
+      errs.age = "Age must be between 5 and 60";
+    }
+
+    if (!form.personTypeId) {
+      errs.personTypeId = "Person type is required";
+    }
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
-      [name]: name === 'age' || name === 'personTypeId' ? parseInt(value) : value,
+      [name]:
+        name === "age" || name === "personTypeId" ? parseInt(value) : value,
     }));
   };
 
@@ -52,7 +69,7 @@ function PersonForm({ initialForm, personTypes, onSubmit }: Props) {
         <input
           name="name"
           type="text"
-          className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+          className={`form-control ${errors.name ? "is-invalid" : ""}`}
           value={form.name}
           onChange={handleChange}
         />
@@ -64,7 +81,7 @@ function PersonForm({ initialForm, personTypes, onSubmit }: Props) {
         <input
           name="age"
           type="number"
-          className={`form-control ${errors.age ? 'is-invalid' : ''}`}
+          className={`form-control ${errors.age ? "is-invalid" : ""}`}
           value={form.age}
           onChange={handleChange}
         />
@@ -75,17 +92,19 @@ function PersonForm({ initialForm, personTypes, onSubmit }: Props) {
         <label className="form-label">Person Type</label>
         <select
           name="personTypeId"
-          className={`form-select ${errors.personTypeId ? 'is-invalid' : ''}`}
+          className={`form-select ${errors.personTypeId ? "is-invalid" : ""}`}
           value={form.personTypeId}
           onChange={handleChange}
         >
-          {personTypes.map(pt => (
+          {personTypes.map((pt) => (
             <option key={pt.id} value={pt.id}>
               {pt.description}
             </option>
           ))}
         </select>
-        {errors.personTypeId && <div className="invalid-feedback">{errors.personTypeId}</div>}
+        {errors.personTypeId && (
+          <div className="invalid-feedback">{errors.personTypeId}</div>
+        )}
       </div>
 
       <div className="text-end">
