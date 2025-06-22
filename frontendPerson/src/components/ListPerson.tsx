@@ -1,15 +1,19 @@
 import { useState } from "react";
 import type { Person, PersonCreate } from "../models/model";
 import PersonModal from "../modals/PersonModal";
-import PersonItem from "./PersonItem";
 
 type Props = {
   personTypes: { id: number; description: string }[];
   initialPersons: Person[];
 };
 
+type SortKey = "name" | "age" | "personTypeId";
+type SortDirection = "asc" | "desc";
+
 function ListPerson({ personTypes, initialPersons }: Props) {
   const [persons, setPersons] = useState<Person[]>(initialPersons);
+  const [sortKey, setSortKey] = useState<SortKey>("age");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
   const [showModal, setShowModal] = useState(false);
   const [editPersonId, setEditPersonId] = useState<number | null>(null);
@@ -20,6 +24,30 @@ function ListPerson({ personTypes, initialPersons }: Props) {
   });
 
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
+  const sortedPersons = [...persons].sort((a, b) => {
+    const aValue = a[sortKey];
+    const bValue = b[sortKey];
+
+    if (typeof aValue === "string" && typeof bValue === "string") {
+      return sortDirection === "asc"
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    } else {
+      return sortDirection === "asc"
+        ? (aValue as number) - (bValue as number)
+        : (bValue as number) - (aValue as number);
+    }
+  });
+
+  const handleSort = (key: SortKey) => {
+    if (key === sortKey) {
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDirection("asc");
+    }
+  };
 
   const openAddModal = () => {
     setForm({ name: "", age: 5, personTypeId: personTypes[0].id });
@@ -37,7 +65,6 @@ function ListPerson({ personTypes, initialPersons }: Props) {
     setShowModal(true);
   };
 
-  // Handle delete action
   const handleDelete = async (id: number) => {
     try {
       const response = await fetch(`${apiBaseUrl}/api/persons/${id}`, {
@@ -45,7 +72,6 @@ function ListPerson({ personTypes, initialPersons }: Props) {
       });
 
       if (response.status === 204) {
-        // Remove person from state on success
         setPersons((prev) => prev.filter((p) => p.id !== id));
       } else {
         const errorText = await response.text();
@@ -59,18 +85,15 @@ function ListPerson({ personTypes, initialPersons }: Props) {
     }
   };
 
-  
-  // Handle save action (create or update)
   const handleSave = async (formData: PersonCreate) => {
     try {
-      const type = personTypes.find(pt => pt.id === formData.personTypeId);
+      const type = personTypes.find((pt) => pt.id === formData.personTypeId);
       if (!type) return;
 
       if (editPersonId === null) {
-        // ✅ CREATE (POST)
         const response = await fetch(`${apiBaseUrl}/api/persons`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         });
 
@@ -81,23 +104,23 @@ function ListPerson({ personTypes, initialPersons }: Props) {
         }
 
         const newPerson: Person = await response.json();
-
-        // Set correct personType (backend returns null)
         newPerson.personType = type;
 
-        setPersons(prev => [...prev, newPerson]);
+        setPersons((prev) => [...prev, newPerson]);
       } else {
-        // ✅ UPDATE (PUT) — include ID in body
         const updatedPerson = {
           id: editPersonId,
           ...formData,
         };
 
-        const response = await fetch(`${apiBaseUrl}/api/persons/${editPersonId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updatedPerson),
-        });
+        const response = await fetch(
+          `${apiBaseUrl}/api/persons/${editPersonId}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedPerson),
+          }
+        );
 
         if (response.status !== 204) {
           const errorText = await response.text();
@@ -105,9 +128,8 @@ function ListPerson({ personTypes, initialPersons }: Props) {
           return;
         }
 
-        // Update local state
-        setPersons(prev =>
-          prev.map(p =>
+        setPersons((prev) =>
+          prev.map((p) =>
             p.id === editPersonId ? { ...p, ...formData, personType: type } : p
           )
         );
@@ -115,11 +137,10 @@ function ListPerson({ personTypes, initialPersons }: Props) {
 
       setShowModal(false);
     } catch (error) {
-      console.error('Error saving person:', error);
-      alert('An error occurred while saving the person.');
+      console.error("Error saving person:", error);
+      alert("An error occurred while saving the person.");
     }
   };
-
 
   return (
     <div className="container mt-4">
@@ -134,20 +155,64 @@ function ListPerson({ personTypes, initialPersons }: Props) {
         </button>
       </div>
 
-      {persons.length === 0 ? (
-        <p>No persons available.</p>
-      ) : (
-        <ul className="list-group">
-          {persons.map((person) => (
-            <PersonItem
-              key={person.id}
-              person={person}
-              onEdit={() => openEditModal(person)}
-              onDelete={() => handleDelete(person.id)}
-            />
-          ))}
-        </ul>
-      )}
+      <table className="table table-bordered table-hover">
+        <thead className="table-light">
+          <tr>
+            <th
+              onClick={() => handleSort("name")}
+              style={{ cursor: "pointer" }}
+            >
+              Name{" "}
+              {sortKey === "name" ? (sortDirection === "asc" ? "↑" : "↓") : ""}
+            </th>
+            <th onClick={() => handleSort("age")} style={{ cursor: "pointer" }}>
+              Age{" "}
+              {sortKey === "age" ? (sortDirection === "asc" ? "↑" : "↓") : ""}
+            </th>
+            <th
+              onClick={() => handleSort("personTypeId")}
+              style={{ cursor: "pointer" }}
+            >
+              Type{" "}
+              {sortKey === "personTypeId"
+                ? sortDirection === "asc"
+                  ? "↑"
+                  : "↓"
+                : ""}
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedPersons.length === 0 ? (
+            <tr>
+              <td colSpan={4}>No persons available.</td>
+            </tr>
+          ) : (
+            sortedPersons.map((person) => (
+              <tr key={person.id}>
+                <td>{person.name}</td>
+                <td>{person.age}</td>
+                <td>{person.personType?.description || person.personTypeId}</td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-primary me-2"
+                    onClick={() => openEditModal(person)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => handleDelete(person.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
 
       {showModal && (
         <PersonModal

@@ -62,7 +62,7 @@ function ListPersonTypes({ personTypes, onPersonTypeAdded }: Props) {
         <ul className="list-group">
           {personTypes.map((type) => (
             <li key={type.id} className="list-group-item">
-              <strong>{type.description}</strong> (ID: {type.id})
+              <strong>{type.description}</strong>
             </li>
           ))}
         </ul>

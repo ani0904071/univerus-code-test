@@ -22,6 +22,7 @@ public class PersonsController : ControllerBase
     public async Task<ActionResult<List<Person>>> GetAll()
     {
         return Ok(await _context.Persons
+                            .OrderBy(p => p.Age)
                             .Include(p => p.PersonType)
                             .ToListAsync());
     }
