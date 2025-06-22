@@ -12,8 +12,22 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<PersonAPIContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+var allowSpeficOrigins = "_allowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: allowSpeficOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:8080") // Adjust this to your frontend URL
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
+
+
 // Apply migrations on startup
 using (var scope = app.Services.CreateScope())
 {
@@ -31,9 +45,5 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapControllers();
+app.UseCors(allowSpeficOrigins);
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
