@@ -36,11 +36,7 @@ function PersonTypeModal({ show, onClose, onSubmit, submitting, initialValue, er
               />
             </div>
 
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={onClose} disabled={submitting}>
-                Cancel
-              </button>
-            </div>
+            
 
           </div>
         </div>

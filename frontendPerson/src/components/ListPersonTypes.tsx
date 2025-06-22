@@ -4,10 +4,10 @@ import PersonTypeModal from "./PersonTypeModal";
 
 type Props = {
   personTypes: PersonType[];
+  onPersonTypeAdded: () => void;
 };
 
-function ListPersonTypes({ personTypes }: Props) {
-  const [localTypes, setLocalTypes] = useState<PersonType[]>(personTypes);
+function ListPersonTypes({ personTypes, onPersonTypeAdded }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +17,7 @@ function ListPersonTypes({ personTypes }: Props) {
   const handleCreate = async (description: string) => {
     try {
       setSubmitting(true);
-      setError(null); // Clear previous errors
+      setError(null);
 
       const response = await fetch(`${apiBaseUrl}/api/persontypes`, {
         method: "POST",
@@ -30,8 +30,8 @@ function ListPersonTypes({ personTypes }: Props) {
         throw new Error(message || `Failed to create: ${response.statusText}`);
       }
 
-      const newType: PersonType = await response.json();
-      setLocalTypes((prev) => [...prev, newType]);
+      await response.json();
+      await onPersonTypeAdded(); // Refresh from server
       setShowModal(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
@@ -56,11 +56,11 @@ function ListPersonTypes({ personTypes }: Props) {
         </button>
       </div>
 
-      {localTypes.length === 0 ? (
+      {personTypes.length === 0 ? (
         <p>No person types found.</p>
       ) : (
         <ul className="list-group">
-          {localTypes.map((type) => (
+          {personTypes.map((type) => (
             <li key={type.id} className="list-group-item">
               <strong>{type.description}</strong> (ID: {type.id})
             </li>
