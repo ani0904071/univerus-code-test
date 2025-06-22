@@ -16,7 +16,7 @@ namespace PersonApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.6")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -60,13 +60,6 @@ namespace PersonApi.Migrations
                             Age = 30,
                             Name = "Bob",
                             PersonTypeId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Age = 40,
-                            Name = "Charlie",
-                            PersonTypeId = 3
                         });
                 });
 
@@ -100,12 +93,7 @@ namespace PersonApi.Migrations
                         new
                         {
                             Id = 2,
-                            Description = "Employee"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Visitor"
+                            Description = "Teacher"
                         });
                 });
 

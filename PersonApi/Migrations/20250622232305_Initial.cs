@@ -52,8 +52,7 @@ namespace PersonApi.Migrations
                 values: new object[,]
                 {
                     { 1, "Student" },
-                    { 2, "Employee" },
-                    { 3, "Visitor" }
+                    { 2, "Teacher" }
                 });
 
             migrationBuilder.InsertData(
@@ -62,8 +61,7 @@ namespace PersonApi.Migrations
                 values: new object[,]
                 {
                     { 1, 22, "Alice", 1 },
-                    { 2, 30, "Bob", 2 },
-                    { 3, 40, "Charlie", 3 }
+                    { 2, 30, "Bob", 2 }
                 });
 
             migrationBuilder.CreateIndex(
