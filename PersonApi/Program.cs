@@ -25,6 +25,9 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 
@@ -38,11 +41,8 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // //app.MapOpenApi();
-    // app.UseSwaggerUI(options =>
-    // {
-    //     options.SwaggerEndpoint("/openapi/v1.json", "Person API V1");
-    // });
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
