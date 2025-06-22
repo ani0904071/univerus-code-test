@@ -1,4 +1,4 @@
-import PersonTypeForm from './PersonTypeForm';
+import PersonTypeForm from '../forms/PersonTypeForm';
 
 interface Props {
   show: boolean;

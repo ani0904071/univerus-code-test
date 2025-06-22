@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import type { PersonCreate, PersonType } from "..//models/model";
+import type { PersonCreate, PersonType } from "../models/model";
 
 interface Props {
   initialForm: PersonCreate;

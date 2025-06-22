@@ -1,5 +1,5 @@
 import type { PersonCreate, PersonType } from '../models/model';
-import PersonForm from './PersonForm';
+import PersonForm from '../forms/PersonForm';
 
 interface Props {
   show: boolean;
