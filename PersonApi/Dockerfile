@@ -1,16 +1,19 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-nanoserver-1809 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 5045
 
 ENV ASPNETCORE_URLS=http://+:5045
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0-nanoserver-1809 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG configuration=Release
 WORKDIR /src
+
+# Copy the csproj and restore it
 COPY ["PersonApi.csproj", "./"]
 RUN dotnet restore "PersonApi.csproj"
+
+# Copy the rest of the code
 COPY . .
-WORKDIR "/src/."
 RUN dotnet build "PersonApi.csproj" -c $configuration -o /app/build
 
 FROM build AS publish
