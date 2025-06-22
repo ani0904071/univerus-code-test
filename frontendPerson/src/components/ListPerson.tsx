@@ -19,6 +19,8 @@ function ListPerson({ personTypes, initialPersons }: Props) {
     personTypeId: personTypes[0].id,
   });
 
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
   const openAddModal = () => {
     setForm({ name: '', age: 5, personTypeId: personTypes[0].id });
     setEditPersonId(null);
@@ -35,9 +37,25 @@ function ListPerson({ personTypes, initialPersons }: Props) {
     setShowModal(true);
   };
 
-  const handleDelete = (id: number) => {
-    setPersons(prev => prev.filter(p => p.id !== id));
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/persons/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.status === 204) {
+        // Remove person from state on success
+        setPersons(prev => prev.filter(p => p.id !== id));
+      } else {
+        const errorText = await response.text();
+        alert(`Failed to delete person. Server responded with: ${response.status} - ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert('An error occurred while trying to delete the person.');
+    }
   };
+
 
   const handleSave = (formData: PersonCreate) => {
     const type = personTypes.find(pt => pt.id === formData.personTypeId);
