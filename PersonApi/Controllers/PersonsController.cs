@@ -93,7 +93,7 @@ public class PersonsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {   
-        if (id == null || id <= 0)
+        if (id <= 0)
         {
             return BadRequest("Invalid person ID.");
         }
