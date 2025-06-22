@@ -11,25 +11,21 @@ function App() {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    const fetchPersons = async () => {
+    const fetchData = async () => {
       try {
-        const response =  await fetch(`${apiBaseUrl}/api/persons`);
-        console.log("Fetching persons from:", response.url);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch persons: ${response.statusText}`);
-        }
-        const data: Person[] = await response.json();
-        setPersons(data);
+        const [personsRes, typesRes] = await Promise.all([
+          fetch(`${apiBaseUrl}/api/persons`),
+          fetch(`${apiBaseUrl}/api/persontypes`)
+        ]);
 
-        // Extract unique personTypes
-        const typeMap = new Map<number, PersonType>();
-        data.forEach((person) => {
-          if (person.personType) {
-            typeMap.set(person.personType.id, person.personType);
-          }
-        });
+        if (!personsRes.ok) throw new Error(`Failed to fetch persons: ${personsRes.statusText}`);
+        if (!typesRes.ok) throw new Error(`Failed to fetch person types: ${typesRes.statusText}`);
 
-        setPersonTypes(Array.from(typeMap.values()));
+        const personsData: Person[] = await personsRes.json();
+        const personTypesData: PersonType[] = await typesRes.json();
+
+        setPersons(personsData);
+        setPersonTypes(personTypesData);
         setLoading(false);
       } catch (err: any) {
         setError(err.message || "Something went wrong");
@@ -37,7 +33,7 @@ function App() {
       }
     };
 
-    fetchPersons();
+    fetchData();
   }, []);
 
   if (loading) return <div className="p-4">Loading...</div>;
