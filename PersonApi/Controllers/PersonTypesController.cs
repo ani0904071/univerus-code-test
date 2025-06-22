@@ -23,7 +23,11 @@ public class PersonTypesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<PersonType>>> GetAll()
     {
-        return Ok(await _context.PersonTypes.ToListAsync());
+        var result = await _context.PersonTypes
+        .OrderBy(pt => pt.Id)
+        .ToListAsync();
+
+        return Ok(result);
     }
 
     [HttpGet("{id:int}")]
