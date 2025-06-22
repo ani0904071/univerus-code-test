@@ -1,5 +1,6 @@
 import "./App.css";
 import ListPerson from "./components/ListPerson";
+import ListPersonTypes from "./components/ListPersonTypes";
 import { useEffect, useState } from "react";
 import type { Person, PersonType } from "./models/model";
 
@@ -40,10 +41,15 @@ function App() {
   if (error) return <div className="p-4 text-danger">Error: {error}</div>;
 
   return (
-    <div>
+  <div className="container mt-4">
+    <div className="scroll-section mb-4">
       <ListPerson personTypes={personTypes} initialPersons={persons} />
     </div>
-  );
+    <div className="scroll-section">
+      <ListPersonTypes personTypes={personTypes} />
+    </div>
+  </div>
+);
 }
 
 export default App;

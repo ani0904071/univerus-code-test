@@ -6,3 +6,12 @@
 .list-group-item:hover {
   background-color: #e9ecef !important;
 }
+
+.scroll-section {
+  max-height: 400px; /* Adjust as needed */
+  overflow-y: auto;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+}
