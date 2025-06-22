@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 interface Props {
   initialValue: string;
@@ -8,20 +8,25 @@ interface Props {
 
 function PersonTypeForm({ initialValue, onSubmit, submitting }: Props) {
   const [description, setDescription] = useState(initialValue);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setDescription(initialValue);
-    setError('');
+    setError("");
   }, [initialValue]);
 
   const validate = (): boolean => {
     if (!description.trim()) {
-      setError('Description is required');
+      setError("Description is required");
       return false;
     }
-    if (description.length > 50) {
-      setError('Description must be under 50 characters');
+    if (description.length < 2 && description.length > 30) {
+      setError("Description must be between 2 and 30 characters");
+      return false;
+    }
+    const validPattern = /^[a-zA-Z\s]+$/;
+    if (!validPattern.test(description)) {
+      setError("Description can only contain letters and spaces");
       return false;
     }
     return true;
@@ -40,7 +45,7 @@ function PersonTypeForm({ initialValue, onSubmit, submitting }: Props) {
         <label className="form-label">Description</label>
         <input
           type="text"
-          className={`form-control ${error ? 'is-invalid' : ''}`}
+          className={`form-control ${error ? "is-invalid" : ""}`}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           disabled={submitting}
@@ -49,7 +54,7 @@ function PersonTypeForm({ initialValue, onSubmit, submitting }: Props) {
       </div>
       <div className="text-end">
         <button type="submit" className="btn btn-primary" disabled={submitting}>
-          {submitting ? 'Saving...' : 'Save'}
+          {submitting ? "Saving..." : "Save"}
         </button>
       </div>
     </form>
