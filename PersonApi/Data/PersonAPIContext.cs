@@ -17,7 +17,7 @@ namespace PersonApi.Data
         {
             base.OnModelCreating(modelBuilder);
 
-             // Seed PersonTypes first (FK target)
+            // Seed PersonTypes first (FK target)
             modelBuilder.Entity<PersonType>().HasData(
                 new PersonType { Id = 1, Description = "Student" },
                 new PersonType { Id = 2, Description = "Employee" },
@@ -56,7 +56,7 @@ namespace PersonApi.Data
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(100);
+                    .HasMaxLength(30);
 
                 entity.Property(e => e.Age)
                     .IsRequired();
@@ -72,16 +72,16 @@ namespace PersonApi.Data
 
             modelBuilder.Entity<PersonType>(entity =>
             {
-                 entity.HasKey(e => e.Id);
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Description)
                     .IsRequired()
-                    .HasMaxLength(100)
+                    .HasMaxLength(30)
                     .UseCollation("SQL_Latin1_General_CP1_CI_AS"); // 👈 Case-insensitive collation
 
                 entity.HasIndex(e => e.Description)
                     .IsUnique();
-                        });
+            });
         }
 
     }
