@@ -27,10 +27,8 @@ namespace TestPerson
 
         } 
 
-
-
         [Fact]
-        public async Task GetPerons_PersonExists() {
+        public async Task GetAllPersons_ShouldReturnAllPersons() {
 
 
             using (var scope = _factory.Services.CreateScope()) 
@@ -48,7 +46,25 @@ namespace TestPerson
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             result.Should().HaveCount(4);
 
-        
         }
+
+        [Fact]
+        public async Task GetPersonById_ShouldReturnCorrectPerson()
+        {
+            // Arrange
+            var response = await _httpClient.GetAsync("/api/persons/1");
+
+            // Act
+            var person = await response.Content.ReadFromJsonAsync<Person>();
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            person.Should().NotBeNull();
+            person.Id.Should().Be(1);
+            person.Name.Should().Be("Alice");
+            person.PersonTypeId.Should().Be(1);
+            person.Age.Should().Be(22);
+        }
+
     }
 }
