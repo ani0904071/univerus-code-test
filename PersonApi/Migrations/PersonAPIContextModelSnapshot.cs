@@ -74,8 +74,7 @@ namespace PersonApi.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 

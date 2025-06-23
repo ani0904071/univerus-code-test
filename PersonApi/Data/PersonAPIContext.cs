@@ -68,8 +68,8 @@ namespace PersonApi.Data
 
                 entity.Property(e => e.Description)
                     .IsRequired()
-                    .HasMaxLength(30)
-                    .UseCollation("SQL_Latin1_General_CP1_CI_AS"); //Case-insensitive collation
+                    .HasMaxLength(30);
+                    //.UseCollation("SQL_Latin1_General_CP1_CI_AS"); //Case-insensitive collation
 
                 entity.HasIndex(e => e.Description)
                     .IsUnique();

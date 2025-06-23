@@ -55,3 +55,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors(allowSpeficOrigins);
 app.Run();
+
+public partial class Program { }
