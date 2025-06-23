@@ -64,7 +64,55 @@ namespace TestPerson
             person.Name.Should().Be("Alice");
             person.PersonTypeId.Should().Be(1);
             person.Age.Should().Be(22);
+            person.PersonType!.Description.Should().Be("Student");
         }
+
+        [Fact]
+        public async Task UpdatePerson_ShouldUpdateSuccessfully()
+        {
+            // Arrange
+            var personToUpdate = new Person
+            {
+                Id = 2,
+                Name = "Updated Name",
+                Age = 40,
+                PersonTypeId = 1
+            };
+
+            // Act
+            var response = await _httpClient.PutAsJsonAsync("/api/persons/2", personToUpdate);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+
+            var updatedPerson = await _httpClient.GetFromJsonAsync<Person>("/api/persons/2");
+            // Assert ID remains the same
+            updatedPerson.Should().NotBeNull();
+            updatedPerson.Id.Should().Be(personToUpdate.Id);
+            updatedPerson.Name.Should().Be(personToUpdate.Name);
+            updatedPerson.Age.Should().Be(personToUpdate.Age);
+            updatedPerson.PersonTypeId.Should().Be(personToUpdate.PersonTypeId);
+
+        }
+
+        [Fact]
+        public async Task DeletePerson_ShouldRemovePerson()
+        {
+            // Arrange
+            var idToDelete = 1;
+
+            // Act
+            var deleteResponse = await _httpClient.DeleteAsync($"/api/persons/{idToDelete}");
+
+            // Assert
+            deleteResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+
+            var getResponse = await _httpClient.GetAsync($"/api/persons/{idToDelete}");
+            getResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+        }
+
+        
+
 
     }
 }
