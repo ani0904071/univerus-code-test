@@ -8,14 +8,14 @@
 				"build"
 			],
 			"dockerBuild": {
-				"tag": "personapi:dev",
+				"tag": "univerus:dev",
 				"target": "base",
-				"dockerfile": "${workspaceFolder}/Dockerfile",
+				"dockerfile": "${workspaceFolder}/PersonApi/Dockerfile",
 				"context": "${workspaceFolder}",
 				"pull": true
 			},
 			"netCore": {
-				"appProject": "${workspaceFolder}/PersonApi.csproj"
+				"appProject": "${workspaceFolder}/PersonApi/PersonApi.csproj"
 			}
 		},
 		{
@@ -25,8 +25,8 @@
 				"build"
 			],
 			"dockerBuild": {
-				"tag": "personapi:latest",
-				"dockerfile": "${workspaceFolder}/Dockerfile",
+				"tag": "univerus:latest",
+				"dockerfile": "${workspaceFolder}/PersonApi/Dockerfile",
 				"context": "${workspaceFolder}",
 				"platform": {
 					"os": "windows",
@@ -35,7 +35,7 @@
 				"pull": true
 			},
 			"netCore": {
-				"appProject": "${workspaceFolder}/PersonApi.csproj"
+				"appProject": "${workspaceFolder}/PersonApi/PersonApi.csproj"
 			}
 		},
 		{
@@ -48,7 +48,7 @@
 				"os": "Windows"
 			},
 			"netCore": {
-				"appProject": "${workspaceFolder}/PersonApi.csproj",
+				"appProject": "${workspaceFolder}/PersonApi/PersonApi.csproj",
 				"enableDebugging": true
 			}
 		},
@@ -62,7 +62,7 @@
 				"os": "Windows"
 			},
 			"netCore": {
-				"appProject": "${workspaceFolder}/PersonApi.csproj"
+				"appProject": "${workspaceFolder}/PersonApi/PersonApi.csproj"
 			}
 		}
 	]
