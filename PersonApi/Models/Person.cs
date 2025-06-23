@@ -4,6 +4,7 @@ namespace PersonApi.Models;
 
 public class Person
 {
+    [Key]
     public int Id { get; set; }
 
     [Required]

@@ -11,7 +11,7 @@ using PersonApi.Data;
 namespace PersonApi.Migrations
 {
     [DbContext(typeof(PersonAPIContext))]
-    [Migration("20250623071718_Initial")]
+    [Migration("20250623182504_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

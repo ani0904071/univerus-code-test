@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 public class PersonType
-{
+{   
+    [Key]
     public int Id { get; set; }
 
     [Required(ErrorMessage = "Description is required.")]
@@ -14,6 +15,6 @@ public class PersonType
     public string Description { get; set; } = string.Empty;
 
     // Navigation property (optional but useful for EF)
-    [JsonIgnore] 
+    [JsonIgnore]
     public ICollection<Person>? Persons { get; set; }
 }
