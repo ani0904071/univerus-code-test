@@ -1,0 +1,12 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS testrunner
+
+WORKDIR /app
+
+# Copy solution
+COPY . .
+
+# Optional: restore test project only to avoid unnecessary work
+RUN dotnet restore "TestPerson/TestPerson.csproj"
+
+# Run the test
+CMD ["dotnet", "test", "TestPerson/TestPerson.csproj", "--logger:trx"]
