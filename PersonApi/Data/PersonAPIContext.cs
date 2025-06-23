@@ -56,9 +56,9 @@ namespace PersonApi.Data
                 entity.Property(e => e.PersonTypeId)
                     .IsRequired();
 
-                entity.HasOne(pt => pt.PersonType)
+                entity.HasOne(p => p.PersonType)
                     .WithMany(pt => pt.Persons)
-                    .HasForeignKey(pt => pt.PersonTypeId)
+                    .HasForeignKey(p => p.PersonTypeId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
