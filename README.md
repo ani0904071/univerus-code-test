@@ -15,7 +15,7 @@ Download or clone the repo:
 
 This will Build and run the MSSQL, PersonApi Web API service, Run integration tests from TestPerson, Run React respectively ( wait for a while to finish )
 
-    > cd univerus-code-test 
+    > cd universu-code-test 
     (Make sure you're on the main branch, type ls/dir to see the file: docker-compose.yml)
     > docker compose up --build -d
 
