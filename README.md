@@ -64,6 +64,9 @@ On this url, you can use the Rest end points
     > dotnet clean
     > dotnet run --launch-profile "http"
 
+     Then open:
+    ➡️ http://localhost:5045/api/persons
+
 🛠 Database Setup (SQL Server must be running via SSMS or Dokcer)
 
     Run these commands after SQL Server is up:
