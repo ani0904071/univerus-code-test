@@ -72,14 +72,14 @@ namespace TestPerson
         //[Fact]
         //public async Task CreatePersonType_ShouldReturnCreated()
         //{
-        //    var newType = new PersonType { Description = "Test Created Type" };
+        //    var newPersonType = new PersonType { Description = "Operator" };
 
-        //    var response = await _httpClient.PostAsJsonAsync("/api/persontypes", newType);
+        //    var response = await _httpClient.PostAsJsonAsync("/api/persontypes", newPersonType);
         //    var created = await response.Content.ReadFromJsonAsync<PersonType>();
 
         //    response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         //    created.Should().NotBeNull();
-        //    created.Description.Should().Be("Test Created Type");
+        //    created.Description.Should().Be("Operator");
         //}
     }
 }
