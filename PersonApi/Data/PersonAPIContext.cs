@@ -46,6 +46,8 @@ namespace PersonApi.Data
             {
                 entity.HasKey(e => e.Id);
 
+                //entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(30);
@@ -56,20 +58,21 @@ namespace PersonApi.Data
                 entity.Property(e => e.PersonTypeId)
                     .IsRequired();
 
-                entity.HasOne(pt => pt.PersonType)
+                entity.HasOne(p => p.PersonType)
                     .WithMany(pt => pt.Persons)
-                    .HasForeignKey(pt => pt.PersonTypeId)
+                    .HasForeignKey(p => p.PersonTypeId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<PersonType>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                // entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Description)
                     .IsRequired()
-                    .HasMaxLength(30)
-                    .UseCollation("SQL_Latin1_General_CP1_CI_AS"); //Case-insensitive collation
+                    .HasMaxLength(30);
+                    //.UseCollation("SQL_Latin1_General_CP1_CI_AS"); //Case-insensitive collation
 
                 entity.HasIndex(e => e.Description)
                     .IsUnique();

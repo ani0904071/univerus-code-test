@@ -1,10 +1,13 @@
 namespace PersonApi.Models;
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 public class PersonType
-{
+{   
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Required(ErrorMessage = "Description is required.")]
@@ -14,6 +17,6 @@ public class PersonType
     public string Description { get; set; } = string.Empty;
 
     // Navigation property (optional but useful for EF)
-    [JsonIgnore] 
+    [JsonIgnore]
     public ICollection<Person>? Persons { get; set; }
 }
