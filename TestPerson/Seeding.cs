@@ -13,8 +13,20 @@ namespace TestPerson
     {
         public static void InitializeTestDB(PersonAPIContext db) {
 
+            db.PersonTypes.AddRange(GetPersonTypes());
+            db.SaveChanges();
+
             db.Persons.AddRange(GetPersons());
             db.SaveChanges();
+        }
+
+        private static List<PersonType> GetPersonTypes()
+        {
+            return new List<PersonType>
+            {
+                new PersonType { Id = 3, Description = "Analyst" },
+                new PersonType { Id = 4, Description = "Director" }
+            };
         }
 
         private static List<Person> GetPersons()

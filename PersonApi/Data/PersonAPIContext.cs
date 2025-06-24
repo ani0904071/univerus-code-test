@@ -46,6 +46,8 @@ namespace PersonApi.Data
             {
                 entity.HasKey(e => e.Id);
 
+                //entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(30);
@@ -65,6 +67,7 @@ namespace PersonApi.Data
             modelBuilder.Entity<PersonType>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                // entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Description)
                     .IsRequired()
