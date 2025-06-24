@@ -7,7 +7,7 @@ using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestPerson
+namespace TestPerson.CustomWebFactory
 {
     public class Seeding
     {

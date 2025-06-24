@@ -10,7 +10,11 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using TestPerson.CustomWebFactory;
+using TestPerson.TestOrder;
 
+[assembly: TestCaseOrderer("TestPerson.TestOrder.PriorityOrderer", "TestPerson")]
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace TestPerson
 {
     public class PersonsControllerTest : IClassFixture<CustomWebApplicationFactory<Program>> 
@@ -25,9 +29,9 @@ namespace TestPerson
                 AllowAutoRedirect = false
             });
 
-        } 
+        }
 
-        [Fact]
+        [Fact, TestPriority(1)]
         public async Task GetAllPersons_ShouldReturnAllPersons() {
 
 
@@ -48,7 +52,7 @@ namespace TestPerson
 
         }
 
-        [Fact]
+        [Fact, TestPriority(2)]
         public async Task GetPersonById_ShouldReturnCorrectPerson()
         {
             // Arrange
@@ -67,7 +71,7 @@ namespace TestPerson
             person.PersonType!.Description.Should().Be("Student");
         }
 
-        [Fact]
+        [Fact, TestPriority(3)]
         public async Task UpdatePerson_ShouldUpdateSuccessfully()
         {
             // Arrange
@@ -95,7 +99,7 @@ namespace TestPerson
 
         }
 
-        [Fact]
+        [Fact, TestPriority(4)]
         public async Task DeletePerson_ShouldRemovePerson()
         {
             // Arrange

@@ -7,10 +7,15 @@ using PersonApi.Models;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using TestPerson.CustomWebFactory;
+using TestPerson.TestOrder;
 using Xunit;
 
+
 namespace TestPerson
-{
+{   
+    //[assembly: TestCaseOrderer("TestPerson.TestOrder.PriorityOrderer", "TestPerson")]
+    //[assembly: CollectionBehavior(DisableTestParallelization = true)]
     public class PersonTypesControllerTest : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         private readonly CustomWebApplicationFactory<Program> _factory;
@@ -26,7 +31,7 @@ namespace TestPerson
 
         }
 
-        [Fact]
+        [Fact, TestPriority(2)]
         public async Task GetAllPersonTypes_ShouldReturnList()
         {
             using (var scope = _factory.Services.CreateScope())
@@ -52,7 +57,7 @@ namespace TestPerson
 
         }
 
-        [Fact]
+        [Fact, TestPriority(1)]
         public async Task GetPersonTypeById_ShouldReturnCorrectPersonType()
         {
             // Arrange
