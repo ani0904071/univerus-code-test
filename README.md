@@ -9,13 +9,13 @@ Includes full integration tests using xUnit and runs in Docker via Docker Compos
 
 Download or clone the repo:
 
-    git clone https://github.com/ani0904071/universu-code-test.git
+    git clone https://github.com/ani0904071/univerus-code-test.git
 
 2. 🛠 Build and Start the Services  (Docker must be installed on the Windows/WSL/Linux System, ex:  Docker version 28.1.1, build 4eba377) 
 
 This will Build and run the MSSQL, PersonApi Web API service, Run integration tests from TestPerson, Run React respectively ( wait for a while to finish )
 
-    > cd universu-code-test 
+    > cd univerus-code-test
     (Make sure you're on the main branch, type ls/dir to see the file: docker-compose.yml)
     > docker compose up --build -d
 
