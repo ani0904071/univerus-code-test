@@ -1,0 +1,74 @@
+using Microsoft.EntityFrameworkCore;
+using PersonApi.Data;
+using PersonApi.Models;
+
+namespace PersonApi.Services;
+
+public class PersonService : IPersonService
+{
+
+    private readonly PersonAPIContext _context;
+
+    public PersonService(PersonAPIContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<List<Person>> GetAllAsync()
+    {
+        return await _context.Persons
+            .OrderBy(p => p.Age)
+            .Include(p => p.PersonType)
+            .ToListAsync();
+    }
+
+    public async Task<Person?> GetByIdAsync(int id)
+    {
+        return await _context.Persons
+            .Include(p => p.PersonType)
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
+
+    public async Task<Person?> CreateAsync(Person newPerson)
+    {
+        var personTypeExists = await _context.PersonTypes
+            .AnyAsync(pt => pt.Id == newPerson.PersonTypeId);
+
+        if (!personTypeExists) return null;
+
+        _context.Persons.Add(newPerson);
+        await _context.SaveChangesAsync();
+
+        return await _context.Persons
+            .Include(p => p.PersonType)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == newPerson.Id);
+    }
+
+    public async Task<bool> UpdateAsync(int id, Person updatedPerson)
+    {
+        if (id != updatedPerson.Id) return false;
+
+        var person = await _context.Persons.FindAsync(id);
+        if (person == null) return false;
+
+        person.Name = updatedPerson.Name;
+        person.Age = updatedPerson.Age;
+        person.PersonTypeId = updatedPerson.PersonTypeId;
+
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var person = await _context.Persons.FindAsync(id);
+        if (person == null) return false;
+
+        _context.Persons.Remove(person);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+
+}

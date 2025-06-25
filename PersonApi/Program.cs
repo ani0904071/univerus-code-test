@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using PersonApi.Data;
+using PersonApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-//builder.Services.AddOpenApi();
-// Add services to the container.
 builder.Services.AddControllers();
+// Add services to the container.
+builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<PersonAPIContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
