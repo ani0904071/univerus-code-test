@@ -1,14 +1,15 @@
 import { useState } from "react";
 import type { Person, PersonCreate } from "../models/model";
 import PersonModal from "../modals/PersonModal";
+import { type SortKey, type SortDirection, sortPersons } from "../utils/sortPersons";
 
 type Props = {
   personTypes: { id: number; description: string }[];
   initialPersons: Person[];
 };
 
-type SortKey = "name" | "age" | "personTypeId";
-type SortDirection = "asc" | "desc";
+
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function ListPerson({ personTypes, initialPersons }: Props) {
   const [persons, setPersons] = useState<Person[]>(initialPersons);
@@ -23,22 +24,8 @@ function ListPerson({ personTypes, initialPersons }: Props) {
     personTypeId: personTypes[0].id,
   });
 
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
-  const sortedPersons = [...persons].sort((a, b) => {
-    const aValue = a[sortKey];
-    const bValue = b[sortKey];
-
-    if (typeof aValue === "string" && typeof bValue === "string") {
-      return sortDirection === "asc"
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
-    } else {
-      return sortDirection === "asc"
-        ? (aValue as number) - (bValue as number)
-        : (bValue as number) - (aValue as number);
-    }
-  });
+  const sortedPersons = sortPersons(persons, sortKey, sortDirection);
 
   const handleSort = (key: SortKey) => {
     if (key === sortKey) {
@@ -67,7 +54,7 @@ function ListPerson({ personTypes, initialPersons }: Props) {
 
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`${apiBaseUrl}/api/persons/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/v1/persons/${id}`, {
         method: "DELETE",
       });
 
@@ -91,7 +78,7 @@ function ListPerson({ personTypes, initialPersons }: Props) {
       if (!type) return;
 
       if (editPersonId === null) {
-        const response = await fetch(`${apiBaseUrl}/api/persons`, {
+        const response = await fetch(`${apiBaseUrl}/api/v1/persons`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -114,7 +101,7 @@ function ListPerson({ personTypes, initialPersons }: Props) {
         };
 
         const response = await fetch(
-          `${apiBaseUrl}/api/persons/${editPersonId}`,
+          `${apiBaseUrl}/api/v1/persons/${editPersonId}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },

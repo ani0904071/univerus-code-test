@@ -31,12 +31,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/persons/",
+							"raw": "{{base_url}}/api/v1/persons/",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"persons",
 								""
 							]
@@ -65,17 +66,81 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{http://localhost:5045}}/api/persons/1",
+							"raw": "{{base_url}}/api/v1/persons/2",
 							"host": [
-								"{{http://localhost:5045}}"
+								"{{base_url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"persons",
-								"1"
+								"2"
 							]
 						},
 						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Person v2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v2/persons/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"persons",
+								"2"
+							]
+						},
+						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Person",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Ronaldo\",\r\n  \"age\": 40,\r\n  \"personTypeId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/persons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"persons"
+							]
+						}
 					},
 					"response": []
 				},
@@ -101,7 +166,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \n  \"id\" : 5,\n  \"personName\": \"lll\",\n  \"personAge\": 28,\n  \"personTypeId\": 1\n}",
+							"raw": "{   \n  \"id\" : 2,\n  \"name\": \"UpdatedName\",\n  \"age\": 32,\n  \"personTypeId\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -109,44 +174,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/persons/5",
+							"raw": "{{base_url}}/api/v1/persons/2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"persons",
-								"5"
+								"2"
 							]
 						},
 						"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
-					},
-					"response": []
-				},
-				{
-					"name": "Create Person",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"personName\": \"Animesh\",\r\n  \"personAge\": 31,\r\n  \"personTypeId\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/persons",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"persons"
-							]
-						}
 					},
 					"response": []
 				},
@@ -180,14 +219,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/persons/2",
+							"raw": "{{base_url}}/api/v1/persons/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"persons",
-								"2"
+								"1"
 							]
 						},
 						"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
@@ -210,7 +250,8 @@
 									"    pm.response.to.have.status(200);",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -218,18 +259,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/info?id=1",
+							"raw": "{{base_url}}/api/v1/persontypes/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"info"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "1"
-								}
+								"api",
+								"v1",
+								"persontypes",
+								"1"
 							]
 						},
 						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
@@ -247,7 +285,8 @@
 									"    pm.response.to.have.status(200);",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -255,18 +294,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/info?id=1",
+							"raw": "{{base_url}}/api/v1/persontypes/",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"info"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "1"
-								}
+								"api",
+								"v1",
+								"persontypes",
+								""
 							]
 						},
 						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
@@ -280,7 +316,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"description\": \"Professor\"\r\n}",
+							"raw": "{\r\n    \"description\": \"Operator\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -288,12 +324,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/persontypes",
+							"raw": "{{base_url}}/api/v1/persontypes",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"persontypes"
 							]
 						}

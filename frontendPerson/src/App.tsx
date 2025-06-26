@@ -13,7 +13,7 @@ function App() {
 
   const refreshPersonTypes = async () => {
     try {
-      const res = await fetch(`${apiBaseUrl}/api/persontypes`);
+      const res = await fetch(`${apiBaseUrl}/api/v1/persontypes`);
       if (!res.ok) throw new Error("Failed to fetch person types");
       const data: PersonType[] = await res.json();
       setPersonTypes(data);
@@ -26,8 +26,8 @@ function App() {
     const fetchData = async () => {
       try {
         const [personsRes, typesRes] = await Promise.all([
-          fetch(`${apiBaseUrl}/api/persons`),
-          fetch(`${apiBaseUrl}/api/persontypes`),
+          fetch(`${apiBaseUrl}/api/v1/persons`),
+          fetch(`${apiBaseUrl}/api/v1/persontypes`),
         ]);
 
         if (!personsRes.ok)
