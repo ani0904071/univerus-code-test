@@ -19,9 +19,12 @@ public class PersonTypeService : IPersonTypeService
         return await _context.PersonTypes.ToListAsync();
     }
 
-    public async Task<PersonType?> GetByIdAsync(int id)
+    public async Task<PersonType> GetByIdAsync(int id)
     {
-        return await _context.PersonTypes.FindAsync(id);
+        var personType = await _context.PersonTypes.FindAsync(id);
+        if (personType == null)
+            throw new InvalidOperationException($"PersonType with ID {id} not found.");
+        return personType;
     }
     public async Task<PersonType> CreateAsync(PersonType newPersonType)
     {

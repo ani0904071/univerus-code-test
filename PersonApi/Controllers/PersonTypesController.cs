@@ -34,8 +34,22 @@ public class PersonTypesController : ControllerBase
     [MapToApiVersion("1.0")]
     public async Task<ActionResult<PersonType>> GetByIdV1(int id)
     {
-        var personType = await _personTypesService.GetByIdAsync(id);
-        if (personType == null) return NotFound();
+        if (id <= 0)
+        {
+            return BadRequest("Invalid person type ID.");
+        }
+
+        PersonType personType;
+        try
+        {
+            personType = await _personTypesService.GetByIdAsync(id);
+            if (personType == null) return NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+
         return Ok(personType);
     }
 
