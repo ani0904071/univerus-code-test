@@ -47,7 +47,7 @@ namespace TestPerson
             }
 
             // Act
-            var response = await _httpClient.GetAsync("/api/persontypes");
+            var response = await _httpClient.GetAsync("/api/v1/persontypes");
             var result = await response.Content.ReadFromJsonAsync<List<PersonType>>();
 
             // Assert
@@ -61,7 +61,7 @@ namespace TestPerson
         public async Task GetPersonTypeById_ShouldReturnCorrectPersonType()
         {
             // Arrange
-            var response = await _httpClient.GetAsync("/api/persontypes/2");
+            var response = await _httpClient.GetAsync("/api/v1/persontypes/2");
 
             // Act
             var personType = await response.Content.ReadFromJsonAsync<PersonType>();

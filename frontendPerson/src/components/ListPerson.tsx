@@ -54,7 +54,7 @@ function ListPerson({ personTypes, initialPersons }: Props) {
 
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`${apiBaseUrl}/api/persons/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/v1/persons/${id}`, {
         method: "DELETE",
       });
 
@@ -78,7 +78,7 @@ function ListPerson({ personTypes, initialPersons }: Props) {
       if (!type) return;
 
       if (editPersonId === null) {
-        const response = await fetch(`${apiBaseUrl}/api/persons`, {
+        const response = await fetch(`${apiBaseUrl}/api/v1/persons`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -101,7 +101,7 @@ function ListPerson({ personTypes, initialPersons }: Props) {
         };
 
         const response = await fetch(
-          `${apiBaseUrl}/api/persons/${editPersonId}`,
+          `${apiBaseUrl}/api/v1/persons/${editPersonId}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },

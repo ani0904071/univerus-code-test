@@ -19,7 +19,7 @@ function ListPersonTypes({ personTypes, onPersonTypeAdded }: Props) {
       setSubmitting(true);
       setError(null);
 
-      const response = await fetch(`${apiBaseUrl}/api/persontypes`, {
+      const response = await fetch(`${apiBaseUrl}/api/v1/persontypes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ description }),

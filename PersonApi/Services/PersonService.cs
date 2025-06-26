@@ -34,6 +34,19 @@ public class PersonService : IPersonService
         return person;
     }
 
+    // Version 2 method to get person by Id without PersonType
+    public async Task<Person> GetByIdAsyncV2(int id)
+    {
+        var person = await _context.Persons
+            //.Include(p => p.PersonType)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (person == null)
+            throw new InvalidOperationException($"Person with Id {id} not found.");
+
+        return person;
+    }
+
     public async Task<Person> CreateAsync(Person newPerson)
     {
         var personTypeExists = await _context.PersonTypes

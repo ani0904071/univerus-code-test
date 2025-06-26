@@ -8,7 +8,9 @@ using PersonApi.Services;
 namespace PersonApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[ApiVersion("2.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class PersonsController : ControllerBase
 {
 
@@ -21,13 +23,15 @@ public class PersonsController : ControllerBase
 
     // GET: api/persons
     [HttpGet]
-    public async Task<ActionResult<List<Person>>> GetAll()
+    [MapToApiVersion("1.0")]
+    public async Task<ActionResult<List<Person>>> GetAllV1()
     {
         return Ok(await _personService.GetAllAsync());
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Person>> GetById(int id)
+    [MapToApiVersion("1.0")]
+    public async Task<ActionResult<Person>> GetByIdV1(int id)
     {
         if (id <= 0)
         {
@@ -48,8 +52,33 @@ public class PersonsController : ControllerBase
         return Ok(person);
     }
 
+    // GET: api/v2/persons MOCK
+    [HttpGet("{id:int}")]
+    [MapToApiVersion("2.0")]
+    public async Task<ActionResult<Person>> GetByIdV2(int id)
+    {
+        if (id <= 0)
+        {
+            return BadRequest("Invalid person ID.");
+        }
+
+        Person? person = null;
+        try
+        {
+            person = await _personService.GetByIdAsyncV2(id);
+            if (person == null) return NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+
+        return Ok(person);
+    }
+
     [HttpPost]
-    public async Task<ActionResult<Person>> Create(Person newPerson)
+    [MapToApiVersion("1.0")]
+    public async Task<ActionResult<Person>> CreateV1([FromBody] Person newPerson)
     {
         if (newPerson == null)
             return BadRequest("Person data is required.");
@@ -58,11 +87,12 @@ public class PersonsController : ControllerBase
         if (created == null)
             return BadRequest("Invalid PersonTypeId.");
 
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        return CreatedAtAction(nameof(GetByIdV1), new { id = created.Id }, created);
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, Person updatedPerson)
+    [MapToApiVersion("1.0")]
+    public async Task<IActionResult> UpdateV1(int id, Person updatedPerson)
     {
         if (id != updatedPerson.Id)
         {
@@ -87,7 +117,8 @@ public class PersonsController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id)
+    [MapToApiVersion("1.0")]
+    public async Task<IActionResult> DeleteV1(int id)
     {
         if (id <= 0)
         {

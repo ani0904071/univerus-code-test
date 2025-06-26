@@ -45,7 +45,7 @@ namespace TestPerson
                 Seeding.InitializeTestDB(db);
             }
 
-            var response = await _httpClient.GetAsync("/api/persons");
+            var response = await _httpClient.GetAsync("/api/v1/persons");
             var result = await response.Content.ReadFromJsonAsync<List<Person>>();
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             result.Should().HaveCount(4);
@@ -56,7 +56,7 @@ namespace TestPerson
         public async Task GetPersonById_ShouldReturnCorrectPerson()
         {
             // Arrange
-            var response = await _httpClient.GetAsync("/api/persons/1");
+            var response = await _httpClient.GetAsync("/api/v1/persons/1");
 
             // Act
             var person = await response.Content.ReadFromJsonAsync<Person>();
@@ -84,12 +84,12 @@ namespace TestPerson
             };
 
             // Act
-            var response = await _httpClient.PutAsJsonAsync("/api/persons/2", personToUpdate);
+            var response = await _httpClient.PutAsJsonAsync("/api/v1/persons/2", personToUpdate);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-            var updatedPerson = await _httpClient.GetFromJsonAsync<Person>("/api/persons/2");
+            var updatedPerson = await _httpClient.GetFromJsonAsync<Person>("/api/v1/persons/2");
             // Assert ID remains the same
             updatedPerson.Should().NotBeNull();
             updatedPerson.Id.Should().Be(personToUpdate.Id);
@@ -103,15 +103,14 @@ namespace TestPerson
         public async Task DeletePerson_ShouldRemovePerson()
         {
             // Arrange
-            var idToDelete = 1;
+            var idToDelete = 2;
 
             // Act
-            var deleteResponse = await _httpClient.DeleteAsync($"/api/persons/{idToDelete}");
+            var deleteResponse = await _httpClient.DeleteAsync($"/api/v1/persons/{idToDelete}");
 
             // Assert
             deleteResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
-
-            var getResponse = await _httpClient.GetAsync($"/api/persons/{idToDelete}");
+            var getResponse = await _httpClient.GetAsync($"/api/v1/persons/{idToDelete}");
             getResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
         }
 

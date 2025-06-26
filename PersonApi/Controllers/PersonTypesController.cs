@@ -10,7 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using PersonApi.Services;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class PersonTypesController : ControllerBase
 {
 
@@ -23,12 +24,14 @@ public class PersonTypesController : ControllerBase
 
     // GET: api/persons
     [HttpGet]
+    [MapToApiVersion("1.0")]
     public async Task<ActionResult<List<PersonType>>> GetAll()
     {
         return Ok(await _personTypesService.GetAllAsync());
     }
 
     [HttpGet("{id:int}")]
+    [MapToApiVersion("1.0")]
     public async Task<ActionResult<PersonType>> GetById(int id)
     {
         var personType = await _personTypesService.GetByIdAsync(id);
@@ -37,6 +40,7 @@ public class PersonTypesController : ControllerBase
     }
 
     [HttpPost]
+    [MapToApiVersion("1.0")]
     public async Task<ActionResult<PersonType>> Create(PersonType newPersonType)
     {
         if (newPersonType == null)
