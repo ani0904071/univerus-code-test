@@ -22,27 +22,38 @@ public class PersonService : IPersonService
             .ToListAsync();
     }
 
-    public async Task<Person?> GetByIdAsync(int id)
+    public async Task<Person> GetByIdAsync(int id)
     {
-        return await _context.Persons
+        var person = await _context.Persons
             .Include(p => p.PersonType)
             .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (person == null)
+            throw new InvalidOperationException($"Person with Id {id} not found.");
+
+        return person;
     }
 
-    public async Task<Person?> CreateAsync(Person newPerson)
+    public async Task<Person> CreateAsync(Person newPerson)
     {
         var personTypeExists = await _context.PersonTypes
             .AnyAsync(pt => pt.Id == newPerson.PersonTypeId);
 
-        if (!personTypeExists) return null;
+        if (!personTypeExists)
+            throw new InvalidOperationException($"Invalid PersonTypeId: {newPerson.PersonTypeId} does not exist.");
 
         _context.Persons.Add(newPerson);
         await _context.SaveChangesAsync();
 
-        return await _context.Persons
+        var createdPerson = await _context.Persons
             .Include(p => p.PersonType)
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == newPerson.Id);
+
+        if (createdPerson == null)
+            throw new InvalidOperationException("Failed to create the person.");
+
+        return createdPerson;
     }
 
     public async Task<bool> UpdateAsync(int id, Person updatedPerson)

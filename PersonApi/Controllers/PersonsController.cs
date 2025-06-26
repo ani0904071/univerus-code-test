@@ -29,8 +29,22 @@ public class PersonsController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Person>> GetById(int id)
     {
-        var person = await _personService.GetByIdAsync(id);
-        if (person == null) return NotFound();
+        if (id <= 0)
+        {
+            return BadRequest("Invalid person ID.");
+        }
+
+        Person? person = null;
+        try
+        {
+            person = await _personService.GetByIdAsync(id);
+            if (person == null) return NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+
         return Ok(person);
     }
 
