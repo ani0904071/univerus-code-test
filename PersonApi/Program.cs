@@ -4,10 +4,11 @@ using PersonApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add controllers to the container.
 builder.Services.AddControllers();
 // Add services to the container.
 builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddScoped<IPersonTypeService, PersonTypeService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<PersonAPIContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

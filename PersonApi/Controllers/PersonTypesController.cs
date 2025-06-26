@@ -7,33 +7,31 @@ using PersonApi.Models;
 namespace PersonApi.Controllers;
 
 using Microsoft.EntityFrameworkCore;
+using PersonApi.Services;
 
 [ApiController]
 [Route("api/[controller]")]
 public class PersonTypesController : ControllerBase
 {
 
-    private readonly PersonAPIContext _context;
-    public PersonTypesController(PersonAPIContext context)
+    private readonly IPersonTypeService _personTypesService;
+
+    public PersonTypesController(IPersonTypeService personTypesService)
     {
-        _context = context;
+        _personTypesService = personTypesService;
     }
 
     // GET: api/persons
     [HttpGet]
     public async Task<ActionResult<List<PersonType>>> GetAll()
     {
-        var result = await _context.PersonTypes
-        .OrderBy(pt => pt.Id)
-        .ToListAsync();
-
-        return Ok(result);
+        return Ok(await _personTypesService.GetAllAsync());
     }
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<PersonType>> GetById(int id)
     {
-        var personType = await _context.PersonTypes.FindAsync(id);
+        var personType = await _personTypesService.GetByIdAsync(id);
         if (personType == null) return NotFound();
         return Ok(personType);
     }
@@ -46,19 +44,15 @@ public class PersonTypesController : ControllerBase
             return BadRequest("PersonType data is required.");
         }
 
-        // Check for duplicates (case-insensitive)
-        bool exists = await _context.PersonTypes
-            .AnyAsync(pt => pt.Description.ToLower() == newPersonType.Description.ToLower());
-
-        if (exists)
+        try
         {
-            return Conflict($"Duplicate detected: '{newPersonType.Description}' already exists.");
+            var created = await _personTypesService.CreateAsync(newPersonType);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
-
-        _context.PersonTypes.Add(newPersonType);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetById), new { id = newPersonType.Id }, newPersonType);
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(ex.Message);
+        }
     }
 
 

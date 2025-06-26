@@ -36,10 +36,10 @@ public class PersonsController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<Person>> Create(Person newPerson)
-    {   
+    {
         if (newPerson == null)
             return BadRequest("Person data is required.");
-            
+
         var created = await _personService.CreateAsync(newPerson);
         if (created == null)
             return BadRequest("Invalid PersonTypeId.");
@@ -54,13 +54,22 @@ public class PersonsController : ControllerBase
         {
             return BadRequest("Person ID mismatch.");
         }
+
         if (updatedPerson == null)
         {
             return BadRequest("Person data is required.");
         }
-        var success = await _personService.UpdateAsync(id, updatedPerson);
-        if (!success) return NotFound();
-        return NoContent();
+
+        try
+        {
+            var success = await _personService.UpdateAsync(id, updatedPerson);
+            if (!success) return NotFound();
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpDelete("{id:int}")]

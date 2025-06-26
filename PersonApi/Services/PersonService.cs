@@ -47,10 +47,17 @@ public class PersonService : IPersonService
 
     public async Task<bool> UpdateAsync(int id, Person updatedPerson)
     {
-        if (id != updatedPerson.Id) return false;
+        if (id != updatedPerson.Id)
+            return false;
 
         var person = await _context.Persons.FindAsync(id);
-        if (person == null) return false;
+        if (person == null)
+            return false;
+
+        // Validate PersonTypeId
+        var personTypeExists = await _context.PersonTypes.AnyAsync(pt => pt.Id == updatedPerson.PersonTypeId);
+        if (!personTypeExists)
+            throw new InvalidOperationException($"Invalid PersonTypeId: {updatedPerson.PersonTypeId} does not exist.");
 
         person.Name = updatedPerson.Name;
         person.Age = updatedPerson.Age;
