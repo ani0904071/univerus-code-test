@@ -25,14 +25,14 @@ public class PersonTypesController : ControllerBase
     // GET: api/persons
     [HttpGet]
     [MapToApiVersion("1.0")]
-    public async Task<ActionResult<List<PersonType>>> GetAll()
+    public async Task<ActionResult<List<PersonType>>> GetAllV1()
     {
         return Ok(await _personTypesService.GetAllAsync());
     }
 
     [HttpGet("{id:int}")]
     [MapToApiVersion("1.0")]
-    public async Task<ActionResult<PersonType>> GetById(int id)
+    public async Task<ActionResult<PersonType>> GetByIdV1(int id)
     {
         var personType = await _personTypesService.GetByIdAsync(id);
         if (personType == null) return NotFound();
@@ -41,7 +41,7 @@ public class PersonTypesController : ControllerBase
 
     [HttpPost]
     [MapToApiVersion("1.0")]
-    public async Task<ActionResult<PersonType>> Create(PersonType newPersonType)
+    public async Task<ActionResult<PersonType>> CreateV1(PersonType newPersonType)
     {
         if (newPersonType == null)
         {
@@ -51,7 +51,7 @@ public class PersonTypesController : ControllerBase
         try
         {
             var created = await _personTypesService.CreateAsync(newPersonType);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            return CreatedAtAction(nameof(GetByIdV1), new { id = created.Id }, created);
         }
         catch (InvalidOperationException ex)
         {
