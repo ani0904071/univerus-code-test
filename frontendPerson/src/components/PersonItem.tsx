@@ -1,7 +1,7 @@
 
 import type { Person } from '../models/model';
 
-interface Props {
+type Props= {
   person: Person;
   onEdit: () => void;
   onDelete: () => void;

@@ -19,7 +19,7 @@ function PersonForm({ initialForm, personTypes, onSubmit }: Props) {
   const validate = (): boolean => {
     const errs: typeof errors = {};
 
-    // Allows only letters, numbers, and spaces (no special characters, no hyphen, no underscore)
+    // Allows only letters, and spaces (no special characters, no hyphen, no underscore)
     const namePattern = /^[a-zA-Z ]+$/;
 
     if (!form.name.trim()) {

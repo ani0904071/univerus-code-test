@@ -4,7 +4,7 @@ import PersonTypeModal from "../modals/PersonTypeModal";
 
 type Props = {
   personTypes: PersonType[];
-  onPersonTypeAdded: () => void;
+  onPersonTypeAdded: (newType: PersonType) => void;
 };
 
 function ListPersonTypes({ personTypes, onPersonTypeAdded }: Props) {
@@ -30,8 +30,9 @@ function ListPersonTypes({ personTypes, onPersonTypeAdded }: Props) {
         throw new Error(message || `Failed to create: ${response.statusText}`);
       }
 
-      await response.json();
-      await onPersonTypeAdded(); // Refresh from server
+      const newPersonType: PersonType = await response.json();
+      // Send back the newlt=y craeted personType to App
+      onPersonTypeAdded(newPersonType);
       setShowModal(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
