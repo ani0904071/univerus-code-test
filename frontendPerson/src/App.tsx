@@ -11,15 +11,8 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
-  const refreshPersonTypes = async () => {
-    try {
-      const res = await fetch(`${apiBaseUrl}/api/v1/persontypes`);
-      if (!res.ok) throw new Error("Failed to fetch person types");
-      const data: PersonType[] = await res.json();
-      setPersonTypes(data);
-    } catch (err: any) {
-      setError(err.message || "Failed to refresh person types");
-    }
+  const addPersonType = (newType: PersonType) => {
+    setPersonTypes((prev) => [...prev, newType]);
   };
 
   useEffect(() => {
@@ -63,7 +56,7 @@ function App() {
       <div className="scroll-section">
         <ListPersonTypes
           personTypes={personTypes}
-          onPersonTypeAdded={refreshPersonTypes}
+          onPersonTypeAdded={addPersonType}
         />
       </div>
     </div>
