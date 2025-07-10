@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Person, PersonCreate } from "../../models/model";
 import PersonModal from "../../modals/PersonModal";
 import {
