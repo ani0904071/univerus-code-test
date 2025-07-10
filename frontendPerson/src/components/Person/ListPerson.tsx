@@ -1,7 +1,8 @@
 import { useState } from "react";
-import type { Person, PersonCreate } from "../models/model";
-import PersonModal from "../modals/PersonModal";
-import { type SortKey, type SortDirection, sortPersons } from "../utils/sortPersons";
+import type { Person, PersonCreate } from "../../models/model";
+import PersonModal from "../../modals/PersonModal";
+import { type SortKey, type SortDirection, sortPersons } from "../../utils/sortPersons";
+import styles from './ListPerson.module.css';
 
 type Props = {
   personTypes: { id: number; description: string }[];
@@ -180,7 +181,7 @@ function ListPerson({ personTypes, initialPersons }: Props) {
               <tr key={person.id}>
                 <td>
                   <span
-                    className="truncate-hover"
+                    className={styles["truncate-hover"]}
                     data-fulltext={person.name}
                     style={{ maxWidth: "120px" }}
                     title={person.name}
@@ -191,7 +192,7 @@ function ListPerson({ personTypes, initialPersons }: Props) {
                 <td>{person.age}</td>
                 <td>
                   <span
-                    className="truncate-hover"
+                    className={styles["truncate-hover"]}
                     style={{ maxWidth: "120px" }}
                     data-fulltext={person.personType?.description || ""}
                     title={person.personType?.description}

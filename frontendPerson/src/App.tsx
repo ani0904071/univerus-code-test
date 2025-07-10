@@ -1,6 +1,6 @@
 import "./App.css";
-import ListPerson from "./components/ListPerson";
-import ListPersonTypes from "./components/ListPersonTypes";
+import ListPerson from "./components/Person/ListPerson";
+import ListPersonTypes from "./components/PersonType/ListPersonTypes";
 import { useEffect, useState } from "react";
 import type { Person, PersonType } from "./models/model";
 

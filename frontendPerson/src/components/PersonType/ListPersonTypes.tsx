@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { PersonType } from "../models/model";
-import PersonTypeModal from "../modals/PersonTypeModal";
+import type { PersonType } from "../../models/model";
+import PersonTypeModal from "../../modals/PersonTypeModal";
 
 type Props = {
   personTypes: PersonType[];
