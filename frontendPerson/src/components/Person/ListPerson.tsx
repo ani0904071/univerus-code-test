@@ -1,14 +1,17 @@
 import { useState } from "react";
 import type { Person, PersonCreate } from "../../models/model";
 import PersonModal from "../../modals/PersonModal";
-import { type SortKey, type SortDirection, sortPersons } from "../../utils/sortPersons";
-import styles from './ListPerson.module.css';
+import {
+  type SortKey,
+  type SortDirection,
+  sortPersons,
+} from "../../utils/sortPersons";
+import styles from "./ListPerson.module.css";
 
 type Props = {
   personTypes: { id: number; description: string }[];
   initialPersons: Person[];
 };
-
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -24,7 +27,6 @@ function ListPerson({ personTypes, initialPersons }: Props) {
     age: 5,
     personTypeId: personTypes[0].id,
   });
-
 
   const sortedPersons = sortPersons(persons, sortKey, sortDirection);
 
@@ -60,7 +62,14 @@ function ListPerson({ personTypes, initialPersons }: Props) {
       });
 
       if (response.status === 204) {
-        setPersons((prev) => prev.filter((p) => p.id !== id));
+        setPersons((prev) => {
+          const list = [...prev];
+          const idx = list.findIndex((p) => p.id === id);
+          if (idx !== -1) {
+            list.splice(idx, 1);
+          }
+          return list;
+        });
       } else {
         const errorText = await response.text();
         alert(
