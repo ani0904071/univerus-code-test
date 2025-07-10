@@ -28,7 +28,9 @@ function ListPerson({ personTypes, initialPersons }: Props) {
     personTypeId: personTypes[0].id,
   });
 
-  const sortedPersons = sortPersons(persons, sortKey, sortDirection);
+  const sortedPersons = useMemo(() => {
+    return sortPersons(persons, sortKey, sortDirection);
+  }, [persons, sortKey, sortDirection]);
 
   const handleSort = (key: SortKey) => {
     if (key === sortKey) {
