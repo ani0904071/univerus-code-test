@@ -3,13 +3,14 @@ import ListPerson from "./components/Person/ListPerson";
 import ListPersonTypes from "./components/PersonType/ListPersonTypes";
 import { useEffect, useState } from "react";
 import type { Person, PersonType } from "./models/model";
+import personService from "./services/personService";
+import personTypeService from "./services/psersonTypeService";
 
 function App() {
   const [persons, setPersons] = useState<Person[]>([]);
   const [personTypes, setPersonTypes] = useState<PersonType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const addPersonType = (newType: PersonType) => {
     setPersonTypes((prev) => [...prev, newType]);
@@ -18,20 +19,10 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [personsRes, typesRes] = await Promise.all([
-          fetch(`${apiBaseUrl}/api/v1/persons`),
-          fetch(`${apiBaseUrl}/api/v1/persontypes`),
+        const [personsData, personTypesData] = await Promise.all([
+          personService.getAllPersons(),
+          personTypeService.getAllPersonTypes(),
         ]);
-
-        if (!personsRes.ok)
-          throw new Error(`Failed to fetch persons: ${personsRes.statusText}`);
-        if (!typesRes.ok)
-          throw new Error(
-            `Failed to fetch person types: ${typesRes.statusText}`
-          );
-
-        const personsData: Person[] = await personsRes.json();
-        const personTypesData: PersonType[] = await typesRes.json();
 
         setPersons(personsData);
         setPersonTypes(personTypesData);

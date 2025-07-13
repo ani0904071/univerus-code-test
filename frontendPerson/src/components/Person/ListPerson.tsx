@@ -7,13 +7,12 @@ import {
   sortPersons,
 } from "../../utils/sortPersons";
 import styles from "./ListPerson.module.css";
+import personService from "../../services/personService";
 
 type Props = {
   personTypes: { id: number; description: string }[];
   initialPersons: Person[];
 };
-
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function ListPerson({ personTypes, initialPersons }: Props) {
   const [persons, setPersons] = useState<Person[]>(initialPersons);
@@ -59,74 +58,31 @@ function ListPerson({ personTypes, initialPersons }: Props) {
 
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`${apiBaseUrl}/api/v1/persons/${id}`, {
-        method: "DELETE",
-      });
-
-      if (response.status === 204) {
-        setPersons((prev) => {
-          const list = [...prev];
-          const idx = list.findIndex((p) => p.id === id);
-          if (idx !== -1) {
-            list.splice(idx, 1);
-          }
-          return list;
-        });
+      const success = await personService.delete(id);
+      if (success) {
+        setPersons((prev) => prev.filter((p) => p.id !== id));
       } else {
-        const errorText = await response.text();
-        alert(
-          `Failed to delete person. Server responded with: ${response.status} - ${errorText}`
-        );
+        alert("Failed to delete person.");
       }
     } catch (error) {
       console.error("Delete error:", error);
-      alert("An error occurred while trying to delete the person.");
+      alert("An error occurred while deleting.");
     }
   };
 
   const handleSave = async (formData: PersonCreate) => {
+    const type = personTypes.find((pt) => pt.id === formData.personTypeId);
+    if (!type) return;
+
     try {
-      const type = personTypes.find((pt) => pt.id === formData.personTypeId);
-      if (!type) return;
-
       if (editPersonId === null) {
-        const response = await fetch(`${apiBaseUrl}/api/v1/persons`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          alert(`Failed to create person: ${response.status} - ${errorText}`);
-          return;
-        }
-
-        const newPerson: Person = await response.json();
+        const newPerson = await personService.create(formData);
+        if (!newPerson) return alert("Failed to create person.");
         newPerson.personType = type;
-
         setPersons((prev) => [...prev, newPerson]);
       } else {
-        const updatedPerson = {
-          id: editPersonId,
-          ...formData,
-        };
-
-        const response = await fetch(
-          `${apiBaseUrl}/api/v1/persons/${editPersonId}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedPerson),
-          }
-        );
-
-        if (response.status !== 204) {
-          const errorText = await response.text();
-          alert(`Failed to update person: ${response.status} - ${errorText}`);
-          return;
-        }
-
+        const success = await personService.update(editPersonId, formData);
+        if (!success) return alert("Failed to update person.");
         setPersons((prev) =>
           prev.map((p) =>
             p.id === editPersonId ? { ...p, ...formData, personType: type } : p
@@ -136,8 +92,8 @@ function ListPerson({ personTypes, initialPersons }: Props) {
 
       setShowModal(false);
     } catch (error) {
-      console.error("Error saving person:", error);
-      alert("An error occurred while saving the person.");
+      console.error("Save error:", error);
+      alert("An error occurred while saving.");
     }
   };
 
