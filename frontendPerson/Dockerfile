@@ -1,17 +1,20 @@
-# This is the newer version
-
 FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package.json .
+# Copy both files
+COPY package.json package-lock.json ./
 
-RUN npm install
+# Use npm ci for clean install
+RUN npm ci
 
-RUN npm i -g serve
+# Optional: install serve globally
+RUN npm install -g serve
 
+# Copy the rest of the code
 COPY . .
 
+# Build the app
 RUN npm run build
 
 EXPOSE 3000
